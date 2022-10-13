@@ -1,12 +1,28 @@
 use v6.c;
 
+use GLib::Raw::Traits;
 use Graphene::Raw::Types;
 use Graphene::Raw::Matrix;
 
-class Graphene::Matrix {
-  has grapene_matrix_t $!gm is implementor;
+use GLib::Roles::Implementor;
 
-  method alloc {
+class Graphene::Matrix {
+  has graphene_matrix_t $!gm is implementor;
+
+  submethod BUILD ( :$graphene-matrix ) {
+    $!gm = $graphene-matrix if $graphene-matrix;
+  }
+
+  multi method new (graphene_matrix_t() $graphene-matrix) {
+    $graphene-matrix ?? self.bless( :$graphene-matrix ) !! Nil;
+  }
+  multi method new {
+    my $graphene-matrix = ::?CLASS.alloc;
+
+    $graphene-matrix ?? self.bless( :$graphene-matrix ) !! Nil;
+  }
+
+  method alloc is static {
     graphene_matrix_alloc();
   }
 
@@ -62,12 +78,19 @@ class Graphene::Matrix {
     graphene_matrix_get_z_translation($!gm);
   }
 
-  method init_from_2d (gdouble $xx, gdouble $yx, gdouble $xy, gdouble $yy, gdouble $x_0, gdouble $y_0) {
+  method init_from_2d (
+    gdouble $xx,
+    gdouble $yx,
+    gdouble $xy,
+    gdouble $yy,
+    gdouble $x_0,
+    gdouble $y_0
+  ) {
     graphene_matrix_init_from_2d($!gm, $xx, $yx, $xy, $yy, $x_0, $y_0);
   }
 
   method init_from_float (gfloat $v is rw) {
-    graphene_matrix_init_from_float($!gm, $v is rw);
+    graphene_matrix_init_from_float($!gm, $v);
   }
 
   method init_from_matrix (graphene_matrix_t $src) {
@@ -211,11 +234,11 @@ class Graphene::Matrix {
   }
 
   method to_2d (gdouble $xx is rw, gdouble $yx is rw, gdouble $xy is rw, gdouble $yy is rw, gdouble $x_0 is rw, gdouble $y_0 is rw) {
-    graphene_matrix_to_2d($!gm, $xx is rw, $yx is rw, $xy is rw, $yy is rw, $x_0 is rw, $y_0 is rw);
+    graphene_matrix_to_2d($!gm, $xx, $yx, $xy, $yy, $x_0, $y_0);
   }
 
   method to_float (gfloat $v is rw) {
-    graphene_matrix_to_float($!gm, $v is rw);
+    graphene_matrix_to_float($!gm, $v);
   }
 
   method transform_bounds (graphene_rect_t $r, graphene_rect_t $res) {
