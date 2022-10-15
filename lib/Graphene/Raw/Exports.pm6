@@ -4,4 +4,5 @@ unit package Graphene::Raw::Exports;
 
 our @graphene-exports is export = <
   Graphene::Raw::Definitions
+  Graphene::Raw::Enums
 >;

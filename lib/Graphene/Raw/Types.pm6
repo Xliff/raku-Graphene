@@ -16,6 +16,7 @@ need GLib::Raw::Traits;
 need GLib::Roles::Pointers;
 need GLib::Roles::Implementor;
 need Graphene::Raw::Definitions;
+need Graphene::Raw::Enums;
 
 BEGIN {
   glib-re-export($_) for |@glib-exports,
