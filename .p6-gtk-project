@@ -4,3 +4,5 @@ backups=backup,bitbucket,google-backup,azure-backup,hut
 hfile-prefix=META_EXPORT:META_EXPORT:CLUTTER_EXPORT
 lib=graphene
 include-directory=/usr/include/graphene-1.0
+build-exclude=
+idir-avail=True
