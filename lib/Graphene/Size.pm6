@@ -6,33 +6,11 @@ use Graphene::Raw::Size;
 
 use GLib::Roles::Object;
 
-our subset GrapheneSizeAncestry is export of Mu
-  where graphene_size_t | GObject;
-
 class Graphene::Size {
-  also does GLib::Roles::Object;
-
   has graphene_size_t $!gs is implementor;
 
   submethod BUILD ( :$graphene-size ) {
-    self.setGrapheneSize($graphene-size) if $graphene-size;
-  }
-
-  method setGrapheneSize (GrapheneSizeAncestry $_) {
-    my $to-parent;
-
-    $!gs = do {
-      when graphene_size_t {
-        $to-parent = cast(GObject, $_);
-        $_;
-      }
-
-      default {
-        $to-parent = $_;
-        cast(graphene_size_t, $_);
-      }
-    }
-    self!setObject($to-parent);
+    $!gs = $graphene-size if $graphene-size;
   }
 
   method Graphene::Raw::Definitions::graphene_size_t
