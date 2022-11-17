@@ -38,8 +38,8 @@ class graphene_size_t is repr<CStruct> is export {
 }
 
 class graphene_rect_t is repr<CStruct> is export {
-  has graphene_point_t $!origin;
-  has graphene_size_t  $!size  ;
+  HAS graphene_point_t $!origin;
+  HAS graphene_size_t  $!size  ;
 
   method origin is rw {
     Proxy.new:
@@ -51,6 +51,11 @@ class graphene_rect_t is repr<CStruct> is export {
     Proxy.new:
       FETCH => -> $                       { $!size      },
       STORE => -> $, graphene_size_t() \v { $!size := v }
+  }
+
+  method gist {
+    "Graphene::Rect.new( origin => { $!origin.gist }, size => {
+     $!size.gist } )";
   }
 
 }
