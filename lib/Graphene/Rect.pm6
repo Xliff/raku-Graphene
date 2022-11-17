@@ -12,10 +12,31 @@ class Graphene::Rect {
 
   has graphene_rect_t $!gr is implementor;
 
-  method alloc is static {
-    my $graphene-rect = graphene_rect_alloc();
+  submethod BUILD ( :$graphene-rect ) {
+    $!gr = $graphene-rect if $graphene-rect
+  }
+
+  method Graphene::Raw::Definitions::graphene_rect_t
+  { $!gr }
+
+  multi method new (graphene_rect_t $graphene-rect, :$ref = True) {
+    return Nil unless $graphene-rect;
+
+    my $o = self.bless( :$graphene-rect );
+    $o.ref if $ref;
+    $o;
+  }
+  multi method new {
+    my $graphene-rect = ::?CLASS.alloc;
 
     $graphene-rect ?? self.bless( :$graphene-rect ) !! Nil;
+  }
+  multi method new (Num() $x, Num() $y, Num() $width, Num() $height) {
+    ::?CLASS.init($x, $y, $width, $height);
+  }
+
+  method alloc is static {
+    graphene_rect_alloc();
   }
 
   method init (Num() $x, Num() $y, Num() $width, Num() $height)
