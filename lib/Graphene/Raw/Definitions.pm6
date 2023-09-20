@@ -59,3 +59,8 @@ class graphene_rect_t is repr<CStruct> is export {
   }
 
 }
+
+# cw: Also might be better in a more global location.
+sub is-initable($q, $t) is export {
+  $q ~~ ::($t) or $q.^can($t)
+}

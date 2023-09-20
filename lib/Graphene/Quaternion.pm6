@@ -232,11 +232,6 @@ class Graphene::Quaternion {
     return samewith($x, $y, $z, :rad) if is-us.not || $preferred ~~ RAD;
   }
 
-  # cw: Also might be better in a more global location.
-  sub is-initable($q, $t) {
-    $q ~~ ::($t) or $q.^can($t)
-  }
-
   multi method new ($q) {
     return samewith($q, :matrix) if $q.&is-initable('graphene_matrix_t');
     return samewith($q, :vec4)   if $q.&is-initable('graphene_vec4_t');
